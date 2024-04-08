@@ -1,39 +1,66 @@
-// # AtividadeUnis
-// Ciclo2 Unis
+// #Atividade Ciclo 3 Unis
+// Desculpa o atraso professor! please.
 #include <iostream>
 
-// Definindo a estrutura do nó
 struct Node {
     int data;
-    Node* next;
+    Node* left;
+    Node* right;
 };
 
-// Função para inserir um nó no início da lista
-void insertAtBeginning(Node** head, int newData) {
+// definir a estrutura para criar um novo nó
+Node* createNode(int data) {
     Node* newNode = new Node();
-    newNode->data = newData;
-    newNode->next = (*head);
-    (*head) = newNode;
+    if (!newNode) {
+        std::cout << "Erro na alocação de memória\n";
+        return nullptr;
+    }
+    newNode->data = data;
+    newNode->left = newNode->right = nullptr;
+    return newNode;
 }
 
-// Função para imprimir a lista
-void printList(Node* node) {
-    while (node != nullptr) {
-        std::cout << node->data << " ";
-        node = node->next;
+// aqui o nó será incluso na arvore
+Node* insertNode(Node* root, int data) {
+    // Se a árvore estiver vazia, atribua um novo nó de endereço ao root
+    if (root == nullptr) {
+        root = createNode(data);
+        return root;
     }
-    std::cout << std::endl;
+
+    
+    if (data < root->data) {
+        root->left = insertNode(root->left, data);
+    }
+    else {
+        root->right = insertNode(root->right, data);
+    }
+
+    return root;
+}
+
+// imprimir a árvore
+void printTree(Node* root) {
+    if (root == nullptr)
+        return;
+
+    printTree(root->left);
+    std::cout << root->data << " ";
+    printTree(root->right);
 }
 
 int main() {
-    Node* head = nullptr;
+    Node* root = nullptr;
 
-    insertAtBeginning(&head, 1);
-    insertAtBeginning(&head, 2);
-    insertAtBeginning(&head, 3);
+    root = insertNode(root, 8); // 8 será a raiz da árvore
+    insertNode(root, 3);
+    insertNode(root, 10);
+    insertNode(root, 1);
+    insertNode(root, 6);
 
-    std::cout << "Lista Encadeada: ";
-    printList(head);
+    std::cout << "Árvore Binária: ";
+    printTree(root);
 
     return 0;
 }
+
